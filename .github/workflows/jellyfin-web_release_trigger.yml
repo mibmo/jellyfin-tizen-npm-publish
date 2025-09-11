@@ -30,6 +30,13 @@ jobs:
           platform: 'github'
           path: 'jellyfin-tizen'
 
+      - name: Clone jellyfin-web
+        uses: sudosubin/git-clone-action@v1.0.1
+        with:
+          repository: 'jellyfin/jellyfin-web'
+          platform: 'github'
+          path: 'jellyfin-web'
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v5
         with:
@@ -101,11 +108,16 @@ jobs:
 
       - name: Build jellyfin-tizen
         run: |
-          cp tizen-adapter.js jellyfin-tizen/
-          cd jellyfin-tizen
+          # build jellyfin-web
+          cd jellyfin-web
+          npm ci --no-audit
+          USE_SYSTEM_FONTS=1 npm run build:production
+
+          # build jellyfin-tizen
+          cd ../jellyfin-tizen
+          cp ../tizen-adapter.js .
           rm .gitignore
-          npm install git+https://github.com/jellyfin/jellyfin-web.git
-          JELLYFIN_WEB_DIR=./node_modules/jellyfin-web npm ci --no-audit
+          JELLYFIN_WEB_DIR=../jellyfin-web/dist npm ci --no-audit
 
       - name: Publish new @mibmo/jellyfin-tizen package version
         uses: JS-DevTools/npm-publish@v3
