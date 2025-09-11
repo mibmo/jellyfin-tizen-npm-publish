@@ -1,26 +1,28 @@
 name: Release trigger
 
 on:
-  repository_dispatch:
-    types: [new-jellyfin-web-release]
-  workflow_dispatch:
+  schedule:
+    # daily releases
+    - cron: '00 00 * * *'
+  push:
+    branches:
+      - main
 
 jobs:
-  jellyfin-web_release_trigger:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
-      - run: env
-
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Get next version
-        uses: reecetech/version-increment@2023.9.3
+        uses: reecetech/version-increment@2024.10.1
         id: version
         with:
           scheme: semver
           increment: patch
 
+      # @TODO: replace this with actions/checkout
       - name: Clone jellyfin-tizen
         uses: sudosubin/git-clone-action@v1.0.1
         with:
@@ -29,7 +31,7 @@ jobs:
           path: 'jellyfin-tizen'
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v3.0.0
+        uses: actions/setup-node@v5
         with:
           node-version: '>=14'
 
@@ -40,7 +42,7 @@ jobs:
           path: 'jellyfin-tizen/package.json'
           data: |
             {
-              "name": "@glenlowland/jellyfin-tizen",
+              "name": "@mibmo/jellyfin-tizen",
               "packageType": "app",
               "appName": "Jellyfin",
               "appPath": "index.html",
@@ -102,10 +104,10 @@ jobs:
           cp tizen-adapter.js jellyfin-tizen/
           cd jellyfin-tizen
           rm .gitignore
-          npm install @glenlowland/jellyfin-web
-          JELLYFIN_WEB_DIR=./node_modules/@glenlowland/jellyfin-web/dist npm ci --no-audit
+          npm install @mibmo/jellyfin-web
+          JELLYFIN_WEB_DIR=./node_modules/@mibmo/jellyfin-web/dist npm ci --no-audit
 
-      - name: Publish new @glenlowland/jellyfin-tizen package version
+      - name: Publish new @mibmo/jellyfin-tizen package version
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
@@ -113,10 +115,7 @@ jobs:
           access: public
 
       - name: Release Build Result
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.info.outputs.version }}
-          body: "A new version of @glenlowland/jellyfin-tizen has been published because of a new release of @glenlowland/jellyfin-web."
-      
-
-      
+          body: "A new version of @mibmo/jellyfin-tizen has been published because of a new release of @mibmo/jellyfin-web."
