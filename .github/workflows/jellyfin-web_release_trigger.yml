@@ -33,6 +33,16 @@ jobs:
         with:
           repository: 'jellyfin/jellyfin-web'
           path: 'jellyfin-web'
+          fetch-tags: true
+          fetch-depth: 0
+
+      - name: Use latest jellyfin-web release
+        run: |
+          cd jellyfin-web
+          LATEST_RELEASE=$(git describe --always --tags $(git rev-list --tags) | sed -En '/^v[0-9]+.[0-9]+.[0-9]+$/p' | head -1)
+          git checkout $LATEST_RELEASE
+          echo "Switching to tag: $LATEST_RELEASE"
+          cd ..
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v5
