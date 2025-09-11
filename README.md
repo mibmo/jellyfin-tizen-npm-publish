@@ -1,7 +1,4 @@
 # jellyfin-tizen for TizenBrew
-Automated process of jellyfin-tizen packaging &amp; publishing to npm registry with a bit of [secret sauce](https://github.com/mibmo/jellyfin-tizen-npm-publish/blob/main/tizen-adapter.js).
-
-The [adapter](https://github.com/mibmo/jellyfin-tizen-npm-publish/blob/main/tizen-adapter.js) is required for `TizenBrew` because when application is loaded through it, it loses access to all Tizen APIs :/
 
 NPM package ready to be used is: [@mibmo/jellyfin-tizen](https://www.npmjs.com/package/@mibmo/jellyfin-tizen)
 
@@ -17,4 +14,4 @@ Add it as a module to your `TizenBrew` and enjoy!
 
 ## Versioning
 
-Package versions are just autoincremented for now as `jellyfin-tizen` repo doesn't increment them.
+Follows that of the associated jellyfin-web release. Not entirely accurate, but good enough :)
