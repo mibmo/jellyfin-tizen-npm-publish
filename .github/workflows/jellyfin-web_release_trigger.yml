@@ -104,8 +104,8 @@ jobs:
           cp tizen-adapter.js jellyfin-tizen/
           cd jellyfin-tizen
           rm .gitignore
-          npm install @mibmo/jellyfin-web
-          JELLYFIN_WEB_DIR=./node_modules/@mibmo/jellyfin-web/dist npm ci --no-audit
+          npm install git+https://github.com/jellyfin/jellyfin-web.git
+          JELLYFIN_WEB_DIR=./node_modules/jellyfin-web npm ci --no-audit
 
       - name: Publish new @mibmo/jellyfin-tizen package version
         uses: JS-DevTools/npm-publish@v3
