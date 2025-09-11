@@ -22,19 +22,16 @@ jobs:
           scheme: semver
           increment: patch
 
-      # @TODO: replace this with actions/checkout
       - name: Clone jellyfin-tizen
-        uses: sudosubin/git-clone-action@v1.0.1
+        uses: actions/checkout@v5
         with:
           repository: 'jellyfin/jellyfin-tizen'
-          platform: 'github'
           path: 'jellyfin-tizen'
 
       - name: Clone jellyfin-web
-        uses: sudosubin/git-clone-action@v1.0.1
+        uses: actions/checkout@v5
         with:
           repository: 'jellyfin/jellyfin-web'
-          platform: 'github'
           path: 'jellyfin-web'
 
       - name: Setup Node.js environment
