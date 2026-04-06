@@ -15,6 +15,7 @@
       {
         shell.packages = with pkgs; [
           act
+          nodejs_22
         ];
       }
     );
