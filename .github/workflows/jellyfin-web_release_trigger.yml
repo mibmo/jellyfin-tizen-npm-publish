@@ -66,6 +66,7 @@ jobs:
       - name: Include tizen-adapter.js in the app
         run: |
           perl -i -pe 's|\Qwebapis.setAttribute('\''src'\'', '\''\E\$\QWEBAPIS/webapis/webapis.js'\'');\E|webapis.setAttribute('\''src'\'', '\''../tizen-adapter.js'\'');|' jellyfin-tizen/gulpfile.babel.js
+      # @TODO: replace this
       - name: Inject skip-intro-button.js in the app
         uses: htsnvhoang/find-replace-multiple@master
         with:
