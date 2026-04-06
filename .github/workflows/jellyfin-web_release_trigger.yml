@@ -43,6 +43,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
       - name: Modify jellyfin-tizen/package.json
         id: info
         uses: jaywcjlove/github-action-package@main
