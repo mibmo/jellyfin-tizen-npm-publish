@@ -94,7 +94,10 @@ jobs:
           rm .gitignore
           JELLYFIN_WEB_DIR=../jellyfin-web/dist npm ci --no-audit
       - name: Publish new @mibmo/jellyfin-tizen package version
-        run: npm publish jellyfin-tizen
+        uses: JS-DevTools/npm-publish@v4
+        with:
+          package: jellyfin-tizen
+          access: public
       - name: Release Build Result
         uses: softprops/action-gh-release@v2
         with:
