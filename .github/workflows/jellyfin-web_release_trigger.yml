@@ -65,7 +65,7 @@ jobs:
           sed -ri 's|version: "DEVELOPMENT"|version: "${{ steps.info.outputs.version }}"|g' tizen-adapter.js
       - name: Include tizen-adapter.js in the app
         run: |
-          sed -ri 's|webapis.setAttribute('src', '$WEBAPIS/webapis/webapis.js');|webapis.setAttribute('src', '../tizen-adapter.js');|g' jellyfin-tizen/gulpfile.babel.js
+          perl -i -pe 's|\Qwebapis.setAttribute('\''src'\'', '\''\E\$\QWEBAPIS/webapis/webapis.js'\'');\E|webapis.setAttribute('\''src'\'', '\''../tizen-adapter.js'\'');|' jellyfin-tizen/gulpfile.babel.js
       - name: Inject skip-intro-button.js in the app
         uses: htsnvhoang/find-replace-multiple@master
         with:
@@ -94,10 +94,7 @@ jobs:
           rm .gitignore
           JELLYFIN_WEB_DIR=../jellyfin-web/dist npm ci --no-audit
       - name: Publish new @mibmo/jellyfin-tizen package version
-        uses: JS-DevTools/npm-publish@v4
-        with:
-          package: jellyfin-tizen
-          access: public
+        run: npm publish jellyfin-tizen
       - name: Release Build Result
         uses: softprops/action-gh-release@v2
         with:
