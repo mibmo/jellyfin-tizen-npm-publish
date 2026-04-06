@@ -104,6 +104,7 @@ jobs:
         with:
           package: jellyfin-tizen
           access: public
+          token: ${{ secrets.NPM_TOKEN }}
       - name: Release Build Result
         uses: softprops/action-gh-release@v2
         with:
