@@ -1,4 +1,7 @@
 name: Release trigger
+permissions:
+  # use npm trusted publishing via OIDC
+  id-token: write
 on:
   schedule:
     # daily releases
@@ -96,7 +99,6 @@ jobs:
       - name: Publish new @mibmo/jellyfin-tizen package version
         uses: JS-DevTools/npm-publish@v4
         with:
-          token: ${{ secrets.NPM_TOKEN }}
           package: jellyfin-tizen
           access: public
       - name: Release Build Result
