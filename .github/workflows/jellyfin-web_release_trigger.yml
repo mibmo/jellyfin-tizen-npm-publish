@@ -63,9 +63,6 @@ jobs:
       - name: Set tizen-adapter.js app version
         run: |
           sed -ri 's|version: "DEVELOPMENT"|version: "${{ steps.info.outputs.version }}"|g' tizen-adapter.js
-      - name: Enable TrueHD Audio
-        run: |
-          sed -ri 's|return profileBuilder({ enableMkvProgressive: false, enableSsaRender: true });|return profileBuilder({ enableMkvProgressive: false, enableSsaRender: true, supportsTrueHd: true });|g' jellyfin-tizen/gulpfile.babel.js
       - name: Include tizen-adapter.js in the app
         run: |
           sed -ri 's|webapis.setAttribute('src', '$WEBAPIS/webapis/webapis.js');|webapis.setAttribute('src', '../tizen-adapter.js');|g' jellyfin-tizen/gulpfile.babel.js
