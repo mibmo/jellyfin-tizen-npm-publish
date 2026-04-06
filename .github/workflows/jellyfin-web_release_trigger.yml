@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Clone jellyfin-tizen
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: 'jellyfin/jellyfin-tizen'
           path: 'jellyfin-tizen'
       - name: Clone jellyfin-web
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: 'jellyfin/jellyfin-web'
           path: 'jellyfin-web'
@@ -112,7 +112,7 @@ jobs:
           rm .gitignore
           JELLYFIN_WEB_DIR=../jellyfin-web/dist npm ci --no-audit
       - name: Publish new @mibmo/jellyfin-tizen package version
-        uses: JS-DevTools/npm-publish@v3
+        uses: JS-DevTools/npm-publish@v4
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: jellyfin-tizen
