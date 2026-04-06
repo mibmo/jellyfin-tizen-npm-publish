@@ -55,6 +55,10 @@ jobs:
               "appName": "Jellyfin",
               "appPath": "index.html",
               "version": "${{ steps.version.outputs.version }}",
+              "repository": {
+                "type": "git",
+                "url": "git+https://github.com/mibmo/jellyfin-tizen-npm-publish.git"
+              },
               "keys": [
                 "MediaPlayPause", "MediaPlay", "MediaPause", "MediaStop",
                 "MediaTrackPrevious", "MediaTrackNext", "MediaRewind", "MediaFastForward"
