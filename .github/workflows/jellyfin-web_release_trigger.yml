@@ -58,32 +58,14 @@ jobs:
               ]
             }
       - name: Set tize-adapter.js app version
-        uses: htsnvhoang/find-replace-multiple@master
-        with:
-          finds: |
-            version: 'DEVELOPMENT'
-          replaces: |
-            version: '${{ steps.info.outputs.version }}'
-          include: "tizen-adapter.js"
-          separator: "___"
+        run: |
+          sed -ri 's|version: \'DEVELOPMENT\'|version: \'${{ steps.info.outputs.version }}\'|g' tizen-adapter.js
       - name: Enable TrueHD Audio
-        uses: htsnvhoang/find-replace-multiple@master
-        with:
-          finds: |
-            return profileBuilder({ enableMkvProgressive: false, enableSsaRender: true });
-          replaces: |
-            return profileBuilder({ enableMkvProgressive: false, enableSsaRender: true, supportsTrueHd: true });
-          include: "jellyfin-tizen/tizen.js"
-          separator: "___"
+        run: |
+          sed -ri 's|return profileBuilder({ enableMkvProgressive: false, enableSsaRender: true });|return profileBuilder({ enableMkvProgressive: false, enableSsaRender: true, supportsTrueHd: true });|g' jellyfin-tizen/gulpfile.babel.js
       - name: Include tizen-adapter.js in the app
-        uses: htsnvhoang/find-replace-multiple@master
-        with:
-          finds: |
-            webapis.setAttribute('src', '$WEBAPIS/webapis/webapis.js');
-          replaces: |
-            webapis.setAttribute('src', '../tizen-adapter.js');
-          include: "jellyfin-tizen/gulpfile.babel.js"
-          separator: "___"
+        run: |
+          sed -ri 's|webapis.setAttribute('src', '$WEBAPIS/webapis/webapis.js');|webapis.setAttribute('src', '../tizen-adapter.js');|g' jellyfin-tizen/gulpfile.babel.js
       - name: Inject skip-intro-button.js in the app
         uses: htsnvhoang/find-replace-multiple@master
         with:
