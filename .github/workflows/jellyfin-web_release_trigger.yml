@@ -1,5 +1,4 @@
 name: Release trigger
-
 on:
   schedule:
     # daily releases
@@ -7,20 +6,17 @@ on:
   push:
     branches:
       - main
-
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-
       - name: Clone jellyfin-tizen
         uses: actions/checkout@v5
         with:
           repository: 'jellyfin/jellyfin-tizen'
           path: 'jellyfin-tizen'
-
       - name: Clone jellyfin-web
         uses: actions/checkout@v5
         with:
@@ -28,7 +24,6 @@ jobs:
           path: 'jellyfin-web'
           fetch-tags: true
           fetch-depth: 0
-
       - name: Use latest jellyfin-web release
         run: |
           cd jellyfin-web
@@ -36,18 +31,15 @@ jobs:
           git checkout $LATEST_RELEASE
           echo "Switching to tag: $LATEST_RELEASE"
           cd ..
-
       - name: Inherit version from jellyfin-web
         id: version
         run: |
           VERSION=$(jq -r '.version' jellyfin-web/package.json)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Setup Node.js environment
         uses: actions/setup-node@v6
         with:
           node-version: '22'
-
       - name: Modify jellyfin-tizen/package.json
         id: info
         uses: jaywcjlove/github-action-package@main
@@ -65,7 +57,6 @@ jobs:
                 "MediaTrackPrevious", "MediaTrackNext", "MediaRewind", "MediaFastForward"
               ]
             }
-
       - name: Set tize-adapter.js app version
         uses: htsnvhoang/find-replace-multiple@master
         with:
@@ -75,7 +66,6 @@ jobs:
             version: '${{ steps.info.outputs.version }}'
           include: "tizen-adapter.js"
           separator: "___"
-            
       - name: Enable TrueHD Audio
         uses: htsnvhoang/find-replace-multiple@master
         with:
@@ -85,7 +75,6 @@ jobs:
             return profileBuilder({ enableMkvProgressive: false, enableSsaRender: true, supportsTrueHd: true });
           include: "jellyfin-tizen/tizen.js"
           separator: "___"
-
       - name: Include tizen-adapter.js in the app
         uses: htsnvhoang/find-replace-multiple@master
         with:
@@ -95,7 +84,6 @@ jobs:
             webapis.setAttribute('src', '../tizen-adapter.js');
           include: "jellyfin-tizen/gulpfile.babel.js"
           separator: "___"
-
       - name: Inject skip-intro-button.js in the app
         uses: htsnvhoang/find-replace-multiple@master
         with:
@@ -111,7 +99,6 @@ jobs:
             injectTarget.insertBefore(skipIntro, apploader);
           include: "jellyfin-tizen/gulpfile.babel.js"
           separator: "___"
-
       - name: Build jellyfin-tizen
         run: |
           # build jellyfin-web
@@ -124,14 +111,12 @@ jobs:
           cp ../tizen-adapter.js .
           rm .gitignore
           JELLYFIN_WEB_DIR=../jellyfin-web/dist npm ci --no-audit
-
       - name: Publish new @mibmo/jellyfin-tizen package version
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: jellyfin-tizen
           access: public
-
       - name: Release Build Result
         uses: softprops/action-gh-release@v2
         with:
