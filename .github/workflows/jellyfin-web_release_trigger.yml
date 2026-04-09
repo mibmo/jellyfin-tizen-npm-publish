@@ -2,6 +2,8 @@ name: Release trigger
 permissions:
   # use npm trusted publishing via OIDC
   id-token: write
+  # allow publishing release
+  contents: write
 on:
   schedule:
     # daily releases
